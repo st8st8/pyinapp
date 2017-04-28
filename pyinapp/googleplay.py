@@ -23,7 +23,7 @@ class GooglePlayValidator(object):
         pem = make_pem(api_key)
         self.public_key = rsa.PublicKey.load_pkcs1_openssl_pem(pem)
 
-    def validate(self, receipt, signature):
+    def validate(self, receipt, signature, get_expiry=True, keyfile=None):
         ok = self._validate_signature(receipt, signature)
 
         if not ok:
@@ -38,7 +38,7 @@ class GooglePlayValidator(object):
             if receipt_json['purchaseState'] != purchase_state_ok:
                 raise InAppValidationError('Item is not purchased')
 
-            return [Purchase.from_google_play_receipt(receipt_json)]
+            return [Purchase.from_google_play_receipt(receipt_json, get_expiry=get_expiry, keyfile=keyfile)]
         except (KeyError, ValueError):
             raise InAppValidationError('Bad receipt')
 
