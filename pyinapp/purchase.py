@@ -24,7 +24,8 @@ class Purchase(object):
             'purchased_at': receipt['purchase_date']
         }
         if 'expires_date' in receipt:
-            purchase["expires_date"] = datetime.utcfromtimestamp(receipt["expires_date"]/1000)
+            purchase["expires_date_raw"] = receipt["expires_date"]
+            purchase["expires_date"] = datetime.utcfromtimestamp(float(receipt["expires_date"])/1000)
         return cls(**purchase)
 
     @classmethod
