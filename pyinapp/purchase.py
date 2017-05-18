@@ -14,6 +14,7 @@ class Purchase(object):
         self.product_id = product_id
         self.quantity = quantity
         self.purchased_at = purchased_at
+        self.purchased_at_datetime = None
         self.expires_date = expires_date
 
     @classmethod
