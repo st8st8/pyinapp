@@ -18,17 +18,18 @@ class Purchase(object):
 
     @classmethod
     def from_app_store_receipt(cls, receipt, get_expiry=True):
+        parser = DateTimeParser()
         purchase = {
             'transaction_id': receipt['transaction_id'],
             'product_id': receipt['product_id'],
-            'quantity': receipt['quantity'],
-            'purchased_at': receipt['purchase_date']
+            'quantity': receipt['quantity']
         }
-        if 'expires_date' in receipt:
+        purchase["purchased_at_datetime"] = parser.parse(receipt["purchase_date"], "YYYY-MM-DD HH:mm:ss ZZZ")
+
+        if 'expires_date' in receipt and get_expiry:
             try:
                 purchase["expires_date"] = datetime.utcfromtimestamp(float(receipt["expires_date"])/1000)
             except ValueError:
-                parser = DateTimeParser()
                 purchase["expires_date"] = parser.parse(receipt["expires_date"], "YYYY-MM-DD HH:mm:ss ZZZ")
         return cls(**purchase)
 
@@ -41,6 +42,8 @@ class Purchase(object):
             'purchased_at': receipt['purchaseTime'],
             'expires_date': None
         }
+        purchase["purchased_at_datetime"] = datetime.utcfromtimestamp(float(receipt['purchaseTime'])/1000)
+
         if get_expiry:
             scope = "https://www.googleapis.com/auth/androidpublisher"
             credentials = ServiceAccountCredentials.from_json_keyfile_name(keyfile, scopes=[scope])
