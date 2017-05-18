@@ -1,6 +1,6 @@
 import json
 from datetime import datetime
-from dateutil import parser
+from arrow.parser import DateTimeParser
 from httplib2 import Http
 
 from oauth2client.service_account import ServiceAccountCredentials
@@ -28,7 +28,8 @@ class Purchase(object):
             try:
                 purchase["expires_date"] = datetime.utcfromtimestamp(float(receipt["expires_date"])/1000)
             except ValueError:
-                purchase["expires_date"] = parser.parse(receipt["expires_date"])
+                parser = DateTimeParser()
+                purchase["expires_date"] = parser.parse(receipt["expires_date"], "YYYY-MM-DD HH:mm:ss ZZZ")
         return cls(**purchase)
 
     @classmethod
