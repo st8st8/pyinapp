@@ -9,12 +9,12 @@ from pytz import utc
 
 class Purchase(object):
 
-    def __init__(self, transaction_id, product_id, quantity, purchased_at, expires_date):
+    def __init__(self, transaction_id, product_id, quantity, purchased_at, purchased_at_datetime, expires_date):
         self.transaction_id = transaction_id
         self.product_id = product_id
         self.quantity = quantity
         self.purchased_at = purchased_at
-        self.purchased_at_datetime = None
+        self.purchased_at_datetime = purchased_at_datetime
         self.expires_date = expires_date
 
     @classmethod
