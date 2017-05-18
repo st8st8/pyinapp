@@ -2,9 +2,7 @@ import json
 from datetime import datetime
 from arrow.parser import DateTimeParser
 from httplib2 import Http
-
 from oauth2client.service_account import ServiceAccountCredentials
-from pytz import utc
 
 
 class Purchase(object):
@@ -23,7 +21,8 @@ class Purchase(object):
         purchase = {
             'transaction_id': receipt['transaction_id'],
             'product_id': receipt['product_id'],
-            'quantity': receipt['quantity']
+            'quantity': receipt['quantity'],
+            'purchased_at': receipt['purchase_date']
         }
         purchase["purchased_at_datetime"] = parser.parse(receipt["purchase_date"], "YYYY-MM-DD HH:mm:ss ZZZ")
 
